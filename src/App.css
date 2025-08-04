@@ -1,0 +1,108 @@
+body {
+    background-color: #282c34;
+    color: #ccc;
+    font-family: monospace;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 50px;
+    min-height: 100vh;
+}
+
+.main-title {
+    font-size: 2.5em; 
+    color: #fff;
+    text-align: center;
+    margin-bottom: 40px;
+    font-weight: normal;
+}
+
+.typing-test-container {
+    max-width: 900px;
+    width: 100%;
+    padding: 20px;
+}
+
+.word-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; 
+    gap: 12px; 
+    line-height: 2;
+    font-size: 1.8em; 
+    color: #6c757d; 
+    cursor: text; 
+}
+
+.word {
+    white-space: pre;
+}
+
+.active-word {
+    color: #dee2e6;
+}
+
+.correct {
+    color: #fff;
+}
+
+.incorrect {
+    color: #f92672;
+    text-decoration: underline;
+}
+
+.typing-input {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+    opacity: 0;
+}
+
+.results-screen {
+    background-color: #32363e;
+    padding: 40px;
+    border-radius: 15px;
+    text-align: center;
+    border: 1px solid #4a4a4a;
+}
+
+.results-screen h2 {
+    font-size: 2.5em;
+    color: #fff;
+    margin-bottom: 10px;
+}
+
+.results-score {
+    font-size: 2em;
+    color: #FFD700;
+    margin-bottom: 30px;
+}
+
+.chart-container {
+    width: 100%;
+    margin-bottom: 30px;
+}
+
+.chart-container h4 {
+    color: #ccc;
+    margin-bottom: 15px;
+    font-weight: normal;
+}
+
+.reset-button {
+    padding: 12px 25px;
+    font-size: 1.2em;
+    font-weight: bold;
+    font-family: monospace;
+    cursor: pointer;
+    border: none;
+    background-color: #FFD700;
+    color: #282c34;
+    border-radius: 8px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.reset-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(255, 215, 0, 0.2);
+}
