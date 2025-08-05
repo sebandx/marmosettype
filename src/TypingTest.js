@@ -1,3 +1,4 @@
+                
 import React, { useState, useEffect, useRef } from 'react';
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer
@@ -23,9 +24,24 @@ function TypingTest() {
     const [timer, setTimer] = useState(0);
     const [finalWpm, setFinalWpm] = useState(0);
     const [wpmData, setWpmData] = useState([]);
+    const [isIdle, setIsIdle] = useState(true); 
 
     const inputRef = useRef(null);
     const correctCharsRef = useRef(0);
+    const idleTimeoutRef = useRef(null);
+
+    useEffect(() => {
+        clearTimeout(idleTimeoutRef.current);
+        
+        if (!isTestFinished) {
+            idleTimeoutRef.current = setTimeout(() => {
+                setIsIdle(true);
+            }, 500);
+        }
+        
+        return () => clearTimeout(idleTimeoutRef.current);
+    }, [userInput, isTestFinished]);
+
 
     const generateWords = () => {
         return Array.from({ length: NUM_OF_WORDS }, () => WORDS[Math.floor(Math.random() * WORDS.length)]);
@@ -41,6 +57,7 @@ function TypingTest() {
         correctCharsRef.current = 0;
         setWpmData([]);
         setFinalWpm(0);
+        setIsIdle(true); 
         if (inputRef.current) {
             inputRef.current.focus();
         }
@@ -67,13 +84,19 @@ function TypingTest() {
 
     const handleInputChange = (e) => {
         const value = e.target.value;
+        
+        setIsIdle(false);
 
         if (isTestFinished) return;
-        if (!isTestStarted) {
+        if (!isTestStarted && value.length > 0) {
             setIsTestStarted(true);
         }
 
         if (value.endsWith(' ')) {
+            if (userInput.length === 0) {
+                return;
+            }
+
             const typedWord = userInput.trim();
             const currentWord = words[activeWordIndex];
 
@@ -91,28 +114,31 @@ function TypingTest() {
 
             setActiveWordIndex(activeWordIndex + 1);
             setUserInput('');
+            setIsIdle(true); 
         } else {
             setUserInput(value);
         }
     };
 
-    // The main container now just holds the title and the conditional content
     return (
         <div className="typing-test-container">
             <h1 className="main-title">Marmoset Type</h1>
             
             {!isTestFinished ? (
-                // This is the active test view, now without the extra div or timer
                 <>
                     <div className="word-container" onClick={() => inputRef.current.focus()}>
                         {words.map((word, wordIndex) => (
                             <span key={wordIndex} className={`word ${wordIndex === activeWordIndex ? 'active-word' : ''}`}>
                                 {word.split('').map((char, charIndex) => {
-                                    let charClass = '';
-                                    if (wordIndex === activeWordIndex && charIndex < userInput.length) {
-                                        charClass = char === userInput[charIndex] ? 'correct' : 'incorrect';
+                                    let className = '';
+                                    if (wordIndex === activeWordIndex) {
+                                        if (charIndex < userInput.length) {
+                                            className = userInput[charIndex] === char ? 'correct' : 'incorrect';
+                                        } else if (charIndex === userInput.length) {
+                                            className = `current-char ${isIdle ? 'blinking-highlight' : ''}`;
+                                        }
                                     }
-                                    return <span key={charIndex} className={charClass}>{char}</span>;
+                                    return <span key={charIndex} className={className}>{char}</span>;
                                 })}
                             </span>
                         ))}

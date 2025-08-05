@@ -51,6 +51,27 @@ body {
     text-decoration: underline;
 }
 
+.current-char {
+    background-color: #FFD700;
+    color: #282c34;
+    border-radius: 2px;
+}
+
+.blinking-highlight {
+    animation: blink-highlight 1s step-end infinite;
+}
+
+@keyframes blink-highlight {
+    from, to {
+        background-color: transparent;
+        color: inherit; 
+    }
+    50% {
+        background-color: #FFD700;
+        color: #282c34;
+    }
+}
+
 .typing-input {
     position: absolute;
     top: -9999px;
